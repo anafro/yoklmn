@@ -25,3 +25,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/_ide_helper.php
+/_ide_helper_models.php
+/.php-cs-fixer.cache
+/.php-cs-fixer.php
