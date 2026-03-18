@@ -10,6 +10,18 @@
 
 @theme inline {
     --font-sans: 'Martian Grotesk', Instrument Sans, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --animate-float-y: float-y 0.5s infinite ease-out alternate;
+
+    @keyframes float-y {
+        from {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(0.125rem);
+        }
+    }
 }
 
 html {

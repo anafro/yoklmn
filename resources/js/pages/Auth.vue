@@ -17,7 +17,7 @@ const {
     <AuthLayout>
         <div class="flex gap-x-18 items-center justify-center">
             <div class="flex flex-col items-end">
-                <Logotype class="text-xl"></Logotype>
+                <Logotype class="text-white text-xl"></Logotype>
                 <Version class="text-xs leading-3"></Version>
             </div>
         </div>

@@ -17,7 +17,7 @@ const text = computed(() => get(variant) === 'title' ? page.props.name : page.pr
 </script>
 
 <template>
-    <span class="text-white font-[1000] font-stretch-200% -skew-x-12">
+    <span class="font-[1000] font-stretch-200% -skew-x-12 inline-block whitespace-nowrap select-none">
         {{ text }}
     </span>
 </template>

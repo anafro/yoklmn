@@ -2,7 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 
 type Props = {
-    variant: "primary" | "secondary";
+    variant: "primary" | "secondary" | "danger" | "custom";
     disabled?: boolean;
     href?: string;
 };
@@ -21,9 +21,10 @@ const {
 
 <template>
     <component :is="href ? Link : 'button'"
-        class="font-black outline-none px-2 py-1 rounded-md cursor-pointer flex items-center justify-center" :class="{
+        class="relative font-semibold px-2 py-1 rounded-lg cursor-pointer flex items-center justify-center" :class="{
             'bg-blue-500 text-white': variant === 'primary',
-            'opacity-20': disabled,
+            'text-red-600': variant === 'danger',
+            'opacity-20 cursor-not-allowed': disabled,
         }" v-bind="href ? { href } : {}" :disabled aria-role="button" @click='emit("click")'>
         <slot></slot>
     </component>
