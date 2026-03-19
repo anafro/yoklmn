@@ -13,10 +13,10 @@ import MenuButton from './MenuButton.vue';
         <MenuButton name="Друзья" description="Собирай компанию ёшек и играйте все вместе!"
             class="bg-yellow-500 text-yellow-950"></MenuButton>
 
-        <MenuButton name="Тренировка" description="Оттачивай навыки премудорого ёшки в одиночку!"
+        <MenuButton href="/тренировка" name="Тренировка" description="Оттачивай навыки премудорого ёшки в одиночку!"
             class="bg-lime-500 text-lime-950"></MenuButton>
 
-        <MenuButton name="Казуальная" description="Играй в сезонные мини-режимы ЁКЛМН!"
-            class="bg-teal-500 text-teal-950"></MenuButton>
+        <MenuButton name="Аркада" description="Играй в сезонные мини-режимы ЁКЛМН!" class="bg-teal-500 text-teal-950">
+        </MenuButton>
     </div>
 </template>

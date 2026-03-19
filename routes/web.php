@@ -5,11 +5,13 @@ use App\Http\Controllers\MenuPageController;
 use App\Http\Controllers\LoginPageController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SignupController;
+use App\Http\Controllers\TrainingPageController;
 use App\Http\Controllers\UserExistsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', MenuPageController::class)->name('menu');
+    Route::get('/тренировка', TrainingPageController::class)->name('menu');
 });
 
 Route::as('auth.')->middleware("guest")->group(function () {
