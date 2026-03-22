@@ -24,7 +24,7 @@ onKeyStroke('Escape', () => set(settingsPopupShown, false));
             <div class="px-5 py-3 col-span-1 bg-white">
                 <div class="mb-2">
                     <div class="flex gap-x-2 items-center justify-center">
-                        <UserAvatar></UserAvatar>
+                        <UserAvatar :name="user.name"></UserAvatar>
                         <span>{{ user.name }}</span>
                         <Button variant="danger" @click="logout">
                             <Icon>logout</Icon>

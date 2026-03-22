@@ -12,7 +12,7 @@ const { settingsPopupShown } = storeToRefs(useSettingsPopupStore());
 
 <template>
     <div class="flex items-center justify-center gap-x-2 px-3 py-2 rounded-xl bg-white/20">
-        <UserAvatar></UserAvatar>
+        <UserAvatar :name="user.name"></UserAvatar>
         <span class="text-white">{{ user.name }}</span>
         <Button variant="custom" @click="settingsPopupShown = true">
             <Icon class="text-white">more_vert</Icon>

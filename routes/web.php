@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\CheckWordController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\MenuPageController;
 use App\Http\Controllers\LoginPageController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RandomTokenController;
 use App\Http\Controllers\SignupController;
 use App\Http\Controllers\TrainingPageController;
 use App\Http\Controllers\UserExistsController;
@@ -30,4 +32,10 @@ Route::prefix('api/v1')->as('v1.')->group(function () {
     Route::prefix('users')->as('users.')->group(function () {
         Route::get('exists', UserExistsController::class)->name('exists');
     });
+
+    Route::middleware('guest.forbidden')
+        ->group(function () {
+            Route::post('random-token', RandomTokenController::class)->name('random-token');
+            Route::post('check-word', CheckWordController::class)->name('check-word');
+        });
 });

@@ -1,7 +1,7 @@
 import { useArray } from "@/lib/arrays";
 import { get, set } from "@vueuse/core";
 import { defineStore } from "pinia";
-import { effect, ref } from "vue";
+import { computed, ref } from "vue";
 
 export const useWordInputStore = defineStore('word-input', () => {
     const caret = ref<number>(0);
@@ -12,6 +12,7 @@ export const useWordInputStore = defineStore('word-input', () => {
         remove,
         slice,
     } = useArray<string>([]);
+    const word = computed(() => get(letters).join(''));
 
     function write(char: string): void {
         insert(caret, char);
@@ -28,6 +29,10 @@ export const useWordInputStore = defineStore('word-input', () => {
     }
 
     function erase(fast: boolean): void {
+        if (get(caret) === 0) {
+            return;
+        }
+
         if (fast) {
             slice(get(caret));
             set(caret, 0);
@@ -37,17 +42,20 @@ export const useWordInputStore = defineStore('word-input', () => {
         }
     }
 
-    effect((): void => {
-        console.log(get(caret));
-    });
+    function clear(): void {
+        set(letters, []);
+        set(caret, 0);
+    }
 
     return {
         caret,
         letters,
         length,
+        word,
 
         write,
         move,
         erase,
-    }
+        clear,
+    };
 });

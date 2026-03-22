@@ -3,7 +3,7 @@ const ruAlphabet = 'йцукенгшщзхъфывапролджэячсмить
 const specialCharacters = '-';
 
 export type WordInputAction = {
-    type: 'char',
+    type: 'write',
     char: string,
 } | {
     type: 'erase',
@@ -16,6 +16,7 @@ export type WordInputAction = {
     type: 'submit',
 } | {
     type: 'unknown',
+    key: string,
 };
 
 export function guessWordInputAction(event: KeyboardEvent): WordInputAction {
@@ -23,7 +24,7 @@ export function guessWordInputAction(event: KeyboardEvent): WordInputAction {
 
     if (ruAlphabet.includes(key) || specialCharacters.includes(key)) {
         return {
-            type: 'char',
+            type: 'write',
             char: key,
         };
     }
@@ -31,7 +32,7 @@ export function guessWordInputAction(event: KeyboardEvent): WordInputAction {
     if (enAlphabet.includes(key)) {
         const charIndex = enAlphabet.indexOf(key);
         return {
-            type: 'char',
+            type: 'write',
             char: ruAlphabet.charAt(charIndex),
         };
     }
@@ -59,5 +60,6 @@ export function guessWordInputAction(event: KeyboardEvent): WordInputAction {
 
     return {
         type: 'unknown',
+        key,
     };
 }

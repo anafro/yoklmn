@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { useWordInputStore } from '@/handles/word-input';
-import { guessWordInputAction } from '@/lib/keyboard';
+import { guessWordInputAction, WordInputAction } from '@/lib/keyboard';
 import { onKeyStroke } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
+
+const emit = defineEmits<{
+    write: [char: string],
+    erase: [fast: boolean],
+    move: [direction: 'left' | 'right', fast: boolean],
+    submit: [],
+    unknown: [key: string],
+}>();
 
 const {
     length,
@@ -10,26 +18,20 @@ const {
     caret,
 } = storeToRefs(useWordInputStore());
 
-const {
-    write,
-    move,
-    erase,
-} = useWordInputStore();
-
 onKeyStroke((event: KeyboardEvent) => {
-    const action = guessWordInputAction(event);
+    const action: WordInputAction = guessWordInputAction(event);
 
     switch (action.type) {
-        case 'char':
-            return write(action.char);
+        case 'write':
+            return emit('write', action.char);
         case 'erase':
-            return erase(action.fast);
+            return emit('erase', action.fast);
         case 'move':
-            return move(action.direction, action.fast);
+            return emit('move', action.direction, action.fast);
         case 'submit':
-            return console.log("undefined: submit");
+            return emit('submit');
         case 'unknown':
-            return console.log("undefined: unknown");
+            return emit('unknown', action.key);
     }
 }, {
     dedupe: false,

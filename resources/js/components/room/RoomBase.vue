@@ -17,8 +17,6 @@ const style = computed(() => ({
 
 <template>
     <div :style class="fixed inset-0 bg-cover flex flex-col items-center justify-between py-12">
-        <div></div>
-        <WordInput></WordInput>
-        <div></div>
+        <slot></slot>
     </div>
 </template>
