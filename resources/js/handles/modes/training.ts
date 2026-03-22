@@ -3,6 +3,7 @@ import { useRandomTokenStore } from "@/api/word/random-token";
 import { get } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
 import { useWordInputStore } from "../word-input";
+import { useSfxStore } from "@/lib/sfx";
 
 export const useTrainingStore = defineStore('training', () => {
     const {
@@ -31,7 +32,11 @@ export const useTrainingStore = defineStore('training', () => {
 
     const {
         requestCheckWord,
-    } = useCheckWordStore()
+    } = useCheckWordStore();
+
+    const {
+        play,
+    } = useSfxStore();
 
     async function submit(): Promise<void> {
         if (randomToken.value === null) {
@@ -41,8 +46,11 @@ export const useTrainingStore = defineStore('training', () => {
         await requestCheckWord(word, randomToken.value);
 
         if (get(isWordCorrect)) {
+            play('ok');
             clear();
             await requestRandomToken();
+        } else {
+            play('bad');
         }
     }
 

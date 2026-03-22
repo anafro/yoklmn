@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useWordInputStore } from '@/handles/word-input';
 import { guessWordInputAction, WordInputAction } from '@/lib/keyboard';
+import { useSfxStore } from '@/lib/sfx';
 import { onKeyStroke } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 
@@ -13,29 +14,36 @@ const emit = defineEmits<{
 }>();
 
 const {
+    play,
+} = useSfxStore();
+
+const {
     length,
     letters,
     caret,
 } = storeToRefs(useWordInputStore());
 
-onKeyStroke((event: KeyboardEvent) => {
+function onKey(event: KeyboardEvent): void {
     const action: WordInputAction = guessWordInputAction(event);
 
     switch (action.type) {
         case 'write':
+            play('write');
             return emit('write', action.char);
         case 'erase':
+            play('erase.' + (action.fast ? 'fast' : 'slow'));
             return emit('erase', action.fast);
         case 'move':
+            play('move.' + (action.fast ? 'fast' : 'slow'));
             return emit('move', action.direction, action.fast);
         case 'submit':
             return emit('submit');
         case 'unknown':
             return emit('unknown', action.key);
     }
-}, {
-    dedupe: false,
-});
+}
+
+onKeyStroke(onKey, { dedupe: true });
 </script>
 
 <template>

@@ -5,6 +5,7 @@ import Icon from '../shared/Icon.vue';
 import { storeToRefs } from 'pinia';
 import { useMenuModeStore } from '@/handles/menu-mode';
 import { get, set } from '@vueuse/core';
+import { useSfxStore } from '@/lib/sfx';
 
 type Props = {
     name: string;
@@ -17,6 +18,10 @@ const {
 } = defineProps<Props>();
 
 const {
+    play,
+} = useSfxStore();
+
+const {
     menuModeShown,
     menuModeName,
     menuModeDescription,
@@ -25,6 +30,7 @@ const {
 const label = computed<string>(() => name.slice(0, 4));
 
 function onMouseOver(): void {
+    play('select');
     set(menuModeName, get(name));
     set(menuModeDescription, get(description));
     set(menuModeShown, true);
@@ -34,10 +40,14 @@ function onMouseLeave(): void {
     set(menuModeShown, false);
 }
 
+function onMouseClick(): void {
+    play('click');
+}
+
 </script>
 
 <template>
-    <Button @mouseover="onMouseOver" @mouseleave="onMouseLeave" variant="custom" class="
+    <Button @click="onMouseClick" @mouseover="onMouseOver" @mouseleave="onMouseLeave" variant="custom" class="
               group/button relative border-white border-2 shadow-2xl outline-transparent outline-16 transition-all ease-out font-stretch-extra-expanded
               group-hover:opacity-20 hover:opacity-100! hover:outline-white/20 hover:shadow-white hover:scale-110 even:hover:rotate-3 odd:hover:-rotate-3
               active:outline-white active:outline-2 active:scale-90 active:saturate-200
