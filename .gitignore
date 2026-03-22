@@ -29,3 +29,8 @@ yarn-error.log
 /_ide_helper_models.php
 /.php-cs-fixer.cache
 /.php-cs-fixer.php
+/compose.override.yaml
+
+**/caddy
+frankenphp
+frankenphp-worker.php

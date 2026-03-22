@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('words', function (Blueprint $table) {
             $table->id();
             $table->string('string')->unique()->nullable(false);
-            // $table->fullText('string')->language('russian');
+            $table->fullText('string')->language('russian');
         });
     }
 
