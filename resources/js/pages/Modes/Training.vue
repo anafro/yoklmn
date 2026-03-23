@@ -3,11 +3,12 @@ import { useUserStore } from '@/api/user/user';
 import Player from '@/components/room/Player.vue';
 import PlayerTray from '@/components/room/PlayerTray.vue';
 import RoomBase from '@/components/room/RoomBase.vue';
+import Timer from '@/components/room/Timer.vue';
 import WordInput from '@/components/room/WordInput.vue';
 import { useTrainingStore } from '@/handles/modes/training';
 import { useWordInputStore } from '@/handles/word-input';
 import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 
 const {
     randomToken,
@@ -30,15 +31,26 @@ const {
 
 onMounted(async (): Promise<void> => {
     await start();
+});
+
+onUnmounted((): void => {
+    stop();
 })
 </script>
 
 <template>
     <RoomBase background="training">
-        <span class="text-white font-stretch-extra-expanded">{{ randomToken }}</span>
-        <WordInput @write="write" @move="move" @erase="erase" @submit="submit"></WordInput>
-        <PlayerTray>
-            <Player :name="user.name"></Player>
-        </PlayerTray>
+        <template #top>
+            <Timer></Timer>
+            <span class="text-white text-center font-stretch-extra-expanded text-3xl font-thin">{{ randomToken }}</span>
+        </template>
+        <template #center>
+            <WordInput @write="write" @move="move" @erase="erase" @submit="submit"></WordInput>
+        </template>
+        <template #bottom>
+            <PlayerTray>
+                <Player :name="user.name"></Player>
+            </PlayerTray>
+        </template>
     </RoomBase>
 </template>
