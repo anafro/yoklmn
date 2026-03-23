@@ -1,13 +1,12 @@
 import { goto } from "@/navigation/goto";
 import { get, onKeyStroke, set, useNow } from "@vueuse/core";
-import { computed, onUnmounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 type UseExitOptions = Partial<{
     presses: number,
     key: string,
     time: number,
 }>;
-
 
 export function useExit(options: UseExitOptions = {}) {
     const {
