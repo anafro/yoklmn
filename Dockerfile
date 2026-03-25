@@ -7,7 +7,8 @@ RUN install-php-extensions \
     sqlite3 \
     pdo_mysql \
     zip \
-    opentelemetry
+    opentelemetry \
+    redis
 
 WORKDIR /app
 COPY --from=composer:2.9.5 /usr/bin/composer /usr/bin/composer

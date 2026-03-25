@@ -5,14 +5,18 @@ import { computed } from "vue";
 
 
 type Props = {
-    variant?: 'title' | 'icon';
+    variant?: 'title' | 'icon' | 'error';
 };
 
 const {
     variant = 'title'
 } = defineProps<Props>();
 const page = usePage();
-const text = computed(() => get(variant) === 'title' ? page.props.name : page.props.name.charAt(0));
+const text = computed(() => ({
+    title: page.props.name,
+    icon: page.props.name.charAt(0),
+    error: page.props.name.charAt(0) + '...',
+}[get(variant)]));
 
 </script>
 

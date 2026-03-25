@@ -32,7 +32,8 @@
     },
     "autoload": {
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/Support/Redis/helpers.php"
         ],
         "psr-4": {
             "App\\": "app/",

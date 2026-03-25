@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CheckWordController;
+use App\Http\Controllers\CreateRoomController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\MenuPageController;
 use App\Http\Controllers\LoginPageController;
@@ -9,12 +10,8 @@ use App\Http\Controllers\RandomTokenController;
 use App\Http\Controllers\SignupController;
 use App\Http\Controllers\TrainingPageController;
 use App\Http\Controllers\UserExistsController;
+use App\Http\Controllers\RoomPageController;
 use Illuminate\Support\Facades\Route;
-
-Route::middleware('auth')->group(function () {
-    Route::get('/', MenuPageController::class)->name('menu');
-    Route::get('/тренировка', TrainingPageController::class)->name('menu');
-});
 
 Route::as('auth.')->middleware("guest")->group(function () {
     Route::get('/войти', LoginPageController::class)->name('login');
@@ -35,7 +32,16 @@ Route::prefix('api/v1')->as('v1.')->group(function () {
 
     Route::middleware('guest.forbidden')
         ->group(function () {
+            Route::post('create-room', CreateRoomController::class)->name('create-room');
             Route::post('random-token', RandomTokenController::class)->name('random-token');
             Route::post('check-word', CheckWordController::class)->name('check-word');
         });
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/', MenuPageController::class)->name('menu');
+    Route::get('/тренировка', TrainingPageController::class)->name('menu');
+    Route::get('/{code}', RoomPageController::class)
+        ->where('code', config('rooms.code.regex'))
+        ->name('room');
 });

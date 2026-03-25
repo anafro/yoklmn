@@ -48,12 +48,25 @@ services:
             retries: 5
         networks:
             - internal
+    redis:
+        image: redis:8.6.1-alpine3.23
+        container_name: yoklmn-redis
+        volumes:
+            - redis:/data
+        command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
+        restart: unless-stopped
+        secrets:
+            - redis-password
+        networks:
+            - internal
     yoklmn:
         build: .
         container_name: yoklmn-website
         depends_on:
             postgresql:
                 condition: service_healthy
+            redis:
+                condition: service_started
         networks:
             - internal
         env_file:
@@ -69,6 +82,9 @@ secrets:
         environment: DB_PASSWORD
     postgresql-database:
         environment: DB_DATABASE
+    redis-password:
+        environment: REDIS_PASSWORD
 
 volumes:
     postgresql:
+    redis:

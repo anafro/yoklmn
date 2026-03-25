@@ -1,22 +1,17 @@
 <script setup lang="ts">
-import MenuButton from './MenuButton.vue';
+import ArcadeMenuButton from './buttons/ArcadeMenuButton.vue';
+import ArenaMenuButton from './buttons/ArenaMenuButton.vue';
+import BattleMenuButton from './buttons/BattleMenuButton.vue';
+import RoomForFriendsMenuButton from './buttons/RoomForFriendsMenuButton.vue';
+import TrainingMenuButton from './buttons/TrainingMenuButton.vue';
 </script>
 
 <template>
     <div class="group flex gap-x-4">
-        <MenuButton name="Арена" description="Сражайся в общей комнате со всеми, чтобы стань лучшим ёшкой!"
-            class="bg-red-500 text-red-950"></MenuButton>
-
-        <MenuButton name="Битва" description="Вступи в схватку один на один с таким же по силе ёшкой как ты!"
-            class="bg-orange-500 text-orange-950"></MenuButton>
-
-        <MenuButton name="Друзья" description="Собирай компанию ёшек и играйте все вместе!"
-            class="bg-yellow-500 text-yellow-950"></MenuButton>
-
-        <MenuButton href="/тренировка" name="Тренировка" description="Оттачивай навыки премудорого ёшки в одиночку!"
-            class="bg-lime-500 text-lime-950"></MenuButton>
-
-        <MenuButton name="Аркада" description="Играй в сезонные мини-режимы ЁКЛМН!" class="bg-teal-500 text-teal-950">
-        </MenuButton>
+        <ArenaMenuButton></ArenaMenuButton>
+        <BattleMenuButton></BattleMenuButton>
+        <RoomForFriendsMenuButton></RoomForFriendsMenuButton>
+        <TrainingMenuButton></TrainingMenuButton>
+        <ArcadeMenuButton></ArcadeMenuButton>
     </div>
 </template>

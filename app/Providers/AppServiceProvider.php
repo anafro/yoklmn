@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use Config;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use App\Rooms\RoomCodeGenerator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +18,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(RoomCodeGenerator::class, function () {
+            return new RoomCodeGenerator(
+                Config::string('rooms.code.alphabet'),
+                Config::integer('rooms.code.length'),
+            );
+        });
     }
 
     /**
