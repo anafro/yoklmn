@@ -6,6 +6,9 @@ import { useUserStore } from "../user/user";
 import { storeToRefs } from "pinia";
 import { get, set } from "@vueuse/core";
 import { usePlayerListStore } from "@/handles/player-list";
+import { useSfxStore } from "@/lib/sfx";
+import { ref } from "vue";
+import { later } from "@/lib/later";
 
 export const defineRoom = (code: string) => defineBiosphereChannel({ name: `Room #${code}` }, channel => {
     const {
@@ -22,6 +25,7 @@ export const defineRoom = (code: string) => defineBiosphereChannel({ name: `Room
         removePlayer,
     } = usePlayerListStore();
 
+    const sfx = useSfxStore();
     const { user: _me } = storeToRefs(useUserStore());
 
     channel.on(/join/, message => {
@@ -34,12 +38,14 @@ export const defineRoom = (code: string) => defineBiosphereChannel({ name: `Room
         } else {
             addPlayer(player);
         }
+        sfx.play('join');
     });
 
     channel.on(/quit/, message => {
         const player = message.player as string;
         addServerMessage(`${player} вышел из комнаты`);
         removePlayer(player);
+        sfx.play('quit');
     });
 
     channel.on(/chat/, message => {
@@ -49,9 +55,6 @@ export const defineRoom = (code: string) => defineBiosphereChannel({ name: `Room
     });
 
     channel.on(/close/, _ => addServerMessage("Соединение с сервером разорвалось"));
-    channel.on(/.*/, m => {
-        console.log(m, /chat/.test(m.event), m.event);
-    });
 });
 
 export function useRoom() {

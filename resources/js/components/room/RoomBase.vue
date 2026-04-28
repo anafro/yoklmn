@@ -18,21 +18,21 @@ const style = computed(() => ({
 
 <template>
     <div :style class="fixed inset-0 bg-cover flex flex-row items-stretch justify-center px-12 py-6 h-full gap-4">
-        <div>
+        <div class="w-1/5">
             <slot name="left"></slot>
         </div>
-        <div class="flex flex-col items-stretch justify-between h-full">
+        <div class="flex flex-col items-stretch justify-between h-full gap-4 flex-1">
             <div class="flex flex-col items-stretch justify-center gap-y-4">
                 <slot name="top"></slot>
             </div>
-            <div>
+            <div class="flex-1">
                 <slot name="center"></slot>
             </div>
             <div class="flex flex-col items-stretch justify-center">
                 <slot name="bottom"></slot>
             </div>
         </div>
-        <div class="flex-1">
+        <div class="">
             <slot name="right"></slot>
         </div>
     </div>

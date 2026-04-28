@@ -4,6 +4,8 @@ import Chat from '@/components/room/Chat.vue';
 import PlayerList from '@/components/room/PlayerList.vue';
 import Code from '@/components/room/Code.vue';
 import { useRoom } from '@/api/room/room';
+import Pane from '@/components/shared/Pane.vue';
+import RoomToolbar from '@/components/room/RoomToolbar.vue';
 
 type Props = {
     code: {
@@ -28,10 +30,19 @@ room.$onAction(({onError}) => {
             <Code :code="code.cyrillic"></Code>
         </template>
         <template #left>
-             <PlayerList :players="['anafro', 'darkmun', 'limuran', 'ploshka']"></PlayerList>
+             <PlayerList></PlayerList>
         </template>
         <template #right>
              <Chat></Chat>
+        </template>
+        <template #bottom>
+            <RoomToolbar>
+
+            </RoomToolbar>
+        </template>
+        <template #center>
+            <Pane class="flex">
+            </Pane>
         </template>
     </RoomBase>
 </template>
