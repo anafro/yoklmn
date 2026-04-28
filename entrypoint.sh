@@ -22,4 +22,14 @@ if [ "$APP_SEED" = "true" ]; then
     php artisan db:seed
 fi
 
+echo "Starting Biosphere server..."
+
+php artisan biosphere:serve &
+disown
+
+bun run ./node_modules/@anf/biosphere/src/main.ts &
+disown
+
+php artisan network:purge
+
 exec "$@"

@@ -1,5 +1,5 @@
 import { get, set } from "@vueuse/core";
-import { computed, MaybeRef, reactive, ref } from "vue";
+import { computed, MaybeRef, ref } from "vue";
 
 export function withInserted<TElement>(array: TElement[], index: number, element: TElement): TElement[] {
     return [
@@ -43,6 +43,20 @@ export function useArray<TElement>(array: TElement[] = []) {
         set(reference, newArray);
     }
 
+    function push(_element: MaybeRef<TElement>): void {
+        const array = get(reference) as TElement[];
+        const element = get(_element);
+        const newArray = [...array, element];
+        set(reference, newArray);
+    }
+
+    function drop(_element: MaybeRef<TElement>): void {
+        const array = get(reference) as TElement[];
+        const element = get(_element);
+        const newArray = array.filter(_ => _ !== element);
+        set(reference, newArray);
+    }
+
     function clear(): void {
         set(reference, []);
     }
@@ -53,6 +67,8 @@ export function useArray<TElement>(array: TElement[] = []) {
         insert,
         slice,
         remove,
+        push,
+        drop,
         clear,
     };
 }

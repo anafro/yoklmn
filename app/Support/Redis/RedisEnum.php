@@ -5,7 +5,7 @@ namespace App\Support\Redis;
 /**
 * @template T of \BackedEnum
 */
-class RedisBackedCase extends RedisString
+class RedisEnum extends RedisEntry
 {
     /**
     * @param string $key
@@ -19,16 +19,21 @@ class RedisBackedCase extends RedisString
     /**
     * @return T
     */
-    public function getCase(): mixed
+    public function get(): mixed
     {
-        return $this->enumClass::from($this->get());
+        if ($this->doesntExist()) {
+            return null;
+        }
+
+        $string = redis('GET', $this->key);
+        return $this->enum::from($string);
     }
 
     /**
     * @param T $case
     */
-    public function setCase(mixed $case): void
+    public function set(mixed $case): void
     {
-        $this->set($case->value);
+        redis('SET', [$this->key, $case->value]);
     }
 }

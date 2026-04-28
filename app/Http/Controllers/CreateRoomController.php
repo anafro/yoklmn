@@ -14,7 +14,7 @@ class CreateRoomController extends Controller
         $room = new CreateRoom()->perform();
 
         return response()->json([
-            'code' => $room->code,
+            'code' => $room->code->cyrillic,
         ]);
     }
 }

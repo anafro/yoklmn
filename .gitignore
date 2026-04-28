@@ -30,7 +30,7 @@ yarn-error.log
 /.php-cs-fixer.cache
 /.php-cs-fixer.php
 /compose.override.yaml
-
+/packages/
 **/caddy
 frankenphp
 frankenphp-worker.php

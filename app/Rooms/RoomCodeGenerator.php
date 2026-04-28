@@ -2,8 +2,8 @@
 
 namespace App\Rooms;
 
+use App\Support\Atomic\Strings;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 final class RoomCodeGenerator
 {
@@ -12,7 +12,7 @@ final class RoomCodeGenerator
 
     public function __construct(string $alphabet, string $length)
     {
-        $this->alphabet = collect(mb_str_split($alphabet));
+        $this->alphabet = Strings::characters($alphabet);
         $this->length = $length;
     }
 

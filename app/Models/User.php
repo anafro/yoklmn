@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Network\Facades\Network;
+use App\Rooms\Room;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -45,5 +47,34 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function room(): ?Room
+    {
+        if (network()->hasntPlayerRegistered($this)) {
+            return null;
+        }
+
+        return network()->getRoomOf($this);
+    }
+
+    public function isPlaying(): bool
+    {
+        if (network()->hasPlayerRegistered($this)) {
+            $room = $this->room();
+            return $room->exists();
+        }
+
+        return false;
+    }
+
+    public function isNotPlaying(): bool
+    {
+        return ! $this->isPlaying();
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }

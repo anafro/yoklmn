@@ -12,7 +12,7 @@ const {
 <template>
     <Transition>
         <div v-if="active"
-            class="fixed inset-0 bg-white/20 backdrop-blur-xl flex items-center justify-center text-white font-stretch-extra-expanded text-2xl">
+            class="fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center text-white font-stretch-extra-expanded text-2xl">
             Нажми <Kbd class="mx-2">{{ key }}</Kbd> ещё {{ pressesLeft }} раз, чтобы выйти
         </div>
     </Transition>

@@ -11,11 +11,23 @@ use App\Http\Controllers\SignupController;
 use App\Http\Controllers\TrainingPageController;
 use App\Http\Controllers\UserExistsController;
 use App\Http\Controllers\RoomPageController;
+use Anafro\Biosphere\Facades\Biosphere;
 use Illuminate\Support\Facades\Route;
+
+Biosphere::routes();
 
 Route::as('auth.')->middleware("guest")->group(function () {
     Route::get('/войти', LoginPageController::class)->name('login');
 });
+
+Route::post('/broadcasting/auth/debug', function () {
+    return response()->json([
+        'authenticated' => Auth::check(),
+        'user' => Auth::user()?->id,
+        'session_id' => session()->getId(),
+        'guard' => config('auth.defaults.guard'),
+    ]);
+})->middleware(['web', 'auth']);
 
 Route::prefix('api/v1')->as('v1.')->group(function () {
     Route::prefix('auth')

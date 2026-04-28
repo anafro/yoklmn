@@ -2,7 +2,6 @@
 import { useUserStore } from '@/api/user/user';
 import { storeToRefs } from 'pinia';
 import Icon from '../shared/Icon.vue';
-import Button from '../shared/Button.vue';
 import UserAvatar from './UserAvatar.vue';
 import { useSettingsPopupStore } from '@/handles/settings-popup';
 
@@ -14,8 +13,6 @@ const { settingsPopupShown } = storeToRefs(useSettingsPopupStore());
     <div class="flex items-center justify-center gap-x-2 px-3 py-2 rounded-xl bg-white/20">
         <UserAvatar :name="user.name"></UserAvatar>
         <span class="text-white">{{ user.name }}</span>
-        <Button variant="custom" @click="settingsPopupShown = true">
-            <Icon class="text-white">more_vert</Icon>
-        </Button>
+        <Icon class="text-white cursor-pointer" @click="settingsPopupShown = true">more_vert</Icon>
     </div>
 </template>

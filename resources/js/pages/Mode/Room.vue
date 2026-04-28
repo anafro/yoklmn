@@ -1,26 +1,37 @@
 <script setup lang="ts">
-import { useRoomExists } from '@/api/room/room-exists';
 import RoomBase from '@/components/room/RoomBase.vue';
+import Chat from '@/components/room/Chat.vue';
+import PlayerList from '@/components/room/PlayerList.vue';
+import Code from '@/components/room/Code.vue';
+import { useRoom } from '@/api/room/room';
 
 type Props = {
-    code: string;
+    code: {
+        cyrillic: string;
+        latin: string;
+    };
 }
 
 const {
     code,
 } = defineProps<Props>();
 
-const {
-    requestRoomExists,
-    roomExistsRequested,
-    roomExists,
-} = useRoomExists();
+const room = useRoom();
+room.$onAction(({onError}) => {
+    onError(console.error);
+});
 </script>
 
 <template>
     <RoomBase background="friends">
-        <template #center>
-            <span class="text-white text-6xl font-stretch-extra-expanded text-center">#{{ code }}</span>
+        <template #top>
+            <Code :code="code.cyrillic"></Code>
+        </template>
+        <template #left>
+             <PlayerList :players="['anafro', 'darkmun', 'limuran', 'ploshka']"></PlayerList>
+        </template>
+        <template #right>
+             <Chat></Chat>
         </template>
     </RoomBase>
 </template>

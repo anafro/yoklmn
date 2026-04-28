@@ -29,5 +29,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectUsersTo(fn() => route('menu'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
-    })->create();
+        $exceptions->render(function (\Illuminate\Auth\Access\AuthorizationException $e, $request) {
+            \Illuminate\Support\Facades\Log::error('Broadcasting auth failed', [
+                'user' => Auth::id(),
+                'channel' => $request->input('channel_name'),
+                'error' => $e->getMessage(),
+            ]);
+        });
+    })
+    ->withBroadcasting(
+        __DIR__ . '/../routes/channels.php',
+        ['middleware' => ['web', 'auth']]
+    )->create();

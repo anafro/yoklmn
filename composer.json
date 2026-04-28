@@ -7,20 +7,27 @@
         "laravel",
         "framework"
     ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/laravel-biosphere"
+        }
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "anafro/biosphere": "@dev",
         "inertiajs/inertia-laravel": "^2.0",
         "kerigard/laravel-lang-ru": "^2.1",
         "laravel/framework": "^12.0",
         "laravel/octane": "*",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
+        "predis/predis": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.6",
         "fakerphp/faker": "^1.23",
-        "laravel/boost": "^2.0",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "laravel/sail": "^1.41",
@@ -32,7 +39,9 @@
     "autoload": {
         "files": [
             "app/helpers.php",
-            "app/Support/Redis/helpers.php"
+            "app/Support/Redis/helpers.php",
+            "app/Rooms/helpers.php",
+            "app/Network/helpers.php"
         ],
         "psr-4": {
             "App\\": "app/",
@@ -83,8 +92,7 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
-            "@php artisan boost:update --ansi"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -112,6 +120,5 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
     "prefer-stable": true
 }

@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Network\Network;
+use App\Rooms\RoomCodeTransliterator;
+use App\Support\Config\Configuration;
 use Carbon\CarbonImmutable;
-use Config;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -20,8 +23,19 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(RoomCodeGenerator::class, function () {
             return new RoomCodeGenerator(
-                Config::string('rooms.code.alphabet'),
-                Config::integer('rooms.code.length'),
+                Configuration::alphabet('rooms.code.alphabet.cyrillic'),
+                Configuration::integer('rooms.code.length'),
+            );
+        });
+
+        $this->app->singleton(Network::class, function () {
+            return new Network();
+        });
+
+        $this->app->singleton(RoomCodeTransliterator::class, function () {
+            return new RoomCodeTransliterator(
+                Configuration::alphabet('rooms.code.alphabet.cyrillic'),
+                Configuration::alphabet('rooms.code.alphabet.latin'),
             );
         });
     }
@@ -33,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         JsonResource::withoutWrapping();
+        Model::preventLazyLoading();
     }
 
     protected function configureDefaults(): void

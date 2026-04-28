@@ -3,7 +3,7 @@
 
 <template>
     <kbd
-        class="inline-block text-white border-4 border-b-16 border-white px-2 font-sans font-stretch-extra-condensed font-light">
+        class="rounded-sm inline-block text-white bg-white/20 border-b-4 border-white px-2 font-sans font-stretch-extra-condensed font-light">
         <slot></slot>
     </kbd>
 </template>

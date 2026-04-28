@@ -17,17 +17,25 @@ const style = computed(() => ({
 </script>
 
 <template>
-    <div :style class="fixed inset-0 bg-cover flex flex-col items-stretch justify-between py-12 px-8">
-        <div class="flex flex-col items-stretch justify-center gap-y-4">
-            <slot name="top"></slot>
-        </div>
+    <div :style class="fixed inset-0 bg-cover flex flex-row items-stretch justify-center px-12 py-6 h-full gap-4">
         <div>
-            <slot name="center"></slot>
+            <slot name="left"></slot>
         </div>
-        <div class="flex flex-col items-stretch justify-center">
-            <slot name="bottom"></slot>
+        <div class="flex flex-col items-stretch justify-between h-full">
+            <div class="flex flex-col items-stretch justify-center gap-y-4">
+                <slot name="top"></slot>
+            </div>
+            <div>
+                <slot name="center"></slot>
+            </div>
+            <div class="flex flex-col items-stretch justify-center">
+                <slot name="bottom"></slot>
+            </div>
+        </div>
+        <div class="flex-1">
+            <slot name="right"></slot>
         </div>
     </div>
-    <Sunrays></Sunrays>
+    <!--Sunrays></Sunrays-->
     <Exit></Exit>
 </template>
