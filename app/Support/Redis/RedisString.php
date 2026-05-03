@@ -19,4 +19,9 @@ class RedisString extends RedisEntry
     {
         redis('SET', [$this->key, $value]);
     }
+
+    public function length(): int
+    {
+        return mb_strlen($this->get());
+    }
 }
