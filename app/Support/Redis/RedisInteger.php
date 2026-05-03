@@ -18,4 +18,24 @@ final class RedisInteger extends RedisEntry
     {
         redis('SET', [$this->key, $integer]);
     }
+
+    public function incr(): void
+    {
+        redis('INCR', $this->key);
+    }
+
+    public function decr(): void
+    {
+        redis('DECR', $this->key);
+    }
+
+    public function plus(int $amount): void
+    {
+        redis('INCRBY', [$this->key, $amount]);
+    }
+
+    public function minus(int $amount): void
+    {
+        redis('DECRBY', [$this->key, $amount]);
+    }
 }
