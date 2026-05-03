@@ -27,6 +27,16 @@ final class RedisOrderedSet extends RedisEntry
         redis('ZREM', [$this->key, $item]);
     }
 
+    public function indexOf(string $item): int
+    {
+        return redis('ZRANK', [$this->key, $item]);
+    }
+
+    public function at(int $index): string
+    {
+        return redis('ZRANGE', [$this->key, $index, $index])[0];
+    }
+
     /**
      * @return Collection<int,string>
      */
