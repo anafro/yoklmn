@@ -7,7 +7,6 @@ export async function createRoomAndJoin(): Promise<void> {
     if (response.successful) {
         const code: unknown = response.data.code;
         if (typeof code !== 'string') {
-            console.log(code);
             throw new Error(`Room code is not a string`);
         }
 
