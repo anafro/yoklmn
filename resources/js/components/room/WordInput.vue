@@ -1,19 +1,9 @@
 <script setup lang="ts">
 import { useWordInputStore } from '@/handles/word-input';
-import { guessWordInputAction, WordInputAction } from '@/lib/keyboard';
 import { useSfxStore } from '@/lib/sfx';
-import { get, onKeyStroke } from '@vueuse/core';
-import { storeToRefs } from 'pinia';
+import { get } from '@vueuse/core';
 import { useTemplateRef } from 'vue';
 import { gsap } from 'gsap';
-
-const emit = defineEmits<{
-    write: [char: string],
-    erase: [fast: boolean],
-    move: [direction: 'left' | 'right', fast: boolean],
-    submit: [],
-    unknown: [key: string],
-}>();
 
 const {
     play,
@@ -21,62 +11,78 @@ const {
 
 const self = useTemplateRef<HTMLDivElement>('self');
 
-const {
-    length,
-    letters,
-    caret,
-} = storeToRefs(useWordInputStore());
-
-function onKey(event: KeyboardEvent): void {
-    const action: WordInputAction = guessWordInputAction(event);
-
-    if (action.type !== 'unknown') {
+const wordInput = useWordInputStore();
+const resettingAnimation = <F extends (...args: any) => any>(f: F): F => {
+    return ((...args: any) => {
         gsap.killTweensOf(get(self));
         gsap.set(get(self), { x: 0, y: 0 });
-    }
+        return f(...args);
+    }) as F;
+};
 
-    switch (action.type) {
-        case 'write':
-            play('write');
-            gsap.from(get(self), {
-                y: 3,
-                ease: 'elastic.out',
-            });
-            return emit('write', action.char);
-        case 'erase':
-            play('erase.' + (action.fast ? 'fast' : 'slow'));
-            gsap.from(get(self), {
-                x: -(action.fast ? 5 : 1) * 10,
-                ease: 'elastic.out',
-            });
-            return emit('erase', action.fast);
-        case 'move':
-            play('move.' + (action.fast ? 'fast' : 'slow'));
-            gsap.from(get(self), {
-                x: ({ left: -1, right: 1 }[action.direction]) * (action.fast ? 5 : 1) * 10,
-                ease: 'circ.out',
-            });
-            return emit('move', action.direction, action.fast);
-        case 'submit':
-            if (get(length) === 0) {
-                return;
-            }
-            return emit('submit');
-        case 'unknown':
-            return emit('unknown', action.key);
-    }
+const write = resettingAnimation((char: string) => {
+    play('write');
+    gsap.from(get(self), { y: 3, ease: 'elastic.out' });
+    emit('write', char);
+    wordInput.write(char);
+});
+
+const erase = resettingAnimation((fast: boolean) => {
+    play('erase.' + (fast ? 'fast' : 'slow'));
+    gsap.from(get(self), { x: -(fast ? 5 : 1) * 10, ease: 'elastic.out' });
+    emit('erase', fast);
+    wordInput.erase(fast);
+});
+
+const move = resettingAnimation((direction: 'left' | 'right', fast: boolean) => {
+    play('move.' + (fast ? 'fast' : 'slow'));
+    gsap.from(get(self), { x: ({ left: -1, right: 1 }[direction]) * (fast ? 5 : 1) * 10, ease: 'circ.out' });
+    emit('move', direction, fast);
+    wordInput.move(direction, fast);
+});
+
+const submit = resettingAnimation(() => {
+    if (get(length) === 0) return;
+    emit('submit');
+});
+
+const check = resettingAnimation((type: 'ok' | 'bad' | 'used') => {
+    play(type);
+    emit('check', type);
+    if (type === 'ok') wordInput.clear();
+});
+
+function unknown(key: string) {
+    emit('unknown', key);
 }
 
-onKeyStroke(onKey, { dedupe: true });
+defineExpose({
+    write,
+    move,
+    erase,
+    submit,
+    check,
+    unknown,
+});
+
+const emit = defineEmits<{
+    write: [char: string],
+    erase: [fast: boolean],
+    move: [direction: 'left' | 'right', fast: boolean],
+    submit: [],
+    unknown: [key: string],
+    check: [type: 'ok' | 'bad' | 'used'],
+}>();
+
 </script>
 
 <template>
     <div ref='self' class="flex gap-x-1 h-16 items-center justify-center">
-        <template v-for="(_, i) in length + 1">
-            <div :data-i="i" v-if="i === caret" class="w-0 h-full outline-white outline-1"></div>
-            <span :data-i="i" v-if="i !== length"
+        <template v-for="(_, i) in wordInput.length + 1">
+            <div :data-i="i" v-if="i === wordInput.caret" class="w-0 h-full outline-white outline-1"></div>
+            <span :data-i="i" v-if="i !== wordInput.length"
                 class="_letter text-white font-stretch-extra-condensed font-black text-center text-5xl uppercase leading-16">{{
-                    letters[i]
+                    wordInput.letters[i]
                 }}</span>
         </template>
     </div>

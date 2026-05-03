@@ -1,8 +1,8 @@
 import { biosphere, BiosphereChannel } from "@anf/biosphere-client";
 import { usePage } from "@inertiajs/vue3";
 import { defineStore } from "pinia";
-import { onMounted, onUnmounted, ref } from "vue";
-import { get, set } from "@vueuse/core";
+import { ref } from "vue";
+import { get, set, tryOnMounted, tryOnUnmounted } from "@vueuse/core";
 
 
 export function useBiosphere() {
@@ -16,25 +16,35 @@ export function useBiosphere() {
     };
 }
 
-export type UseBiosphereChannelSetupCallback = (channel: BiosphereChannel) => void;
-export type UseBiosphereChannelOptions = { name: string };
-export function defineBiosphereChannel({ name }: UseBiosphereChannelOptions, setup: UseBiosphereChannelSetupCallback) {
+export type UseBiosphereChannelSetupCallback<R> = (channel: BiosphereChannel, refs: R) => void;
+export type UseBiosphereChannelOptions = { name: string, debug?: boolean };
+export function defineBiosphereChannel<R>({ name, debug }: UseBiosphereChannelOptions, refs: R, setup: UseBiosphereChannelSetupCallback<R>) {
     return defineStore(`biosphere-channel:${name}`, () => {
-        const channel = ref<BiosphereChannel>();
-
         const { biosphere } = useBiosphere();
+        const _channel = ref<BiosphereChannel>();
 
-        onMounted(async () => {
-            set(channel, await biosphere.channel(name));
-            setup(get(channel)!);
+        tryOnMounted(async () => {
+            set(_channel, await biosphere.channel(name, { debug }));
+            setup(get(_channel)!, refs);
         });
 
-        onUnmounted(() => {
-            get(channel)?.close();
+        tryOnUnmounted(() => {
+            get(_channel)!.close();
         });
+
+        const channel = () => {
+            const channel = get(_channel);
+
+            if (channel === undefined) {
+                throw new Error(`Channel '${name}' is not yet initialized.`);
+            }
+
+            return channel;
+        }
 
         return {
             channel,
-        }
+            ...refs,
+        };
     });
 }

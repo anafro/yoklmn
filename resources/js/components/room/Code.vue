@@ -15,7 +15,7 @@ import PaneTitle from '../shared/PaneTitle.vue';
 
 
 <template>
-    <Pane class="items-center justify-between gap-12 flex-1">
+    <Pane class="items-start justify-between gap-12 flex-1">
         <div>
             <PaneTitle>Код комнаты</PaneTitle>
             <div class="flex gap-2 items-center">

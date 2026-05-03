@@ -54,7 +54,6 @@ export const useSfxStore = defineStore('sfx', () => {
 
     (function loadSoundEffects(): void {
         const glob = import.meta.glob<SoundEffect>('../sfx/*.json', { eager: true, import: 'default' });
-        console.log(glob);
         for (const [filepath, soundEffect] of Object.entries(glob)) {
             const metadata = parseSoundFilepath(filepath);
             const key = getSoundEffectKey(metadata);

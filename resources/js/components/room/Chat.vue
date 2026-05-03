@@ -4,28 +4,17 @@
     import Input from "../shared/Input.vue";
     import { useRoom } from "@/api/room/room";
     import { useChatStore } from "@/handles/chat";
-    import { storeToRefs } from "pinia";
     import Message from "./Message.vue";
-    import { useUserStore } from "@/api/user/user";
     import { get, set } from "@vueuse/core";
+    import { ref } from "vue";
 
-    const {} = useRoom();
-    const {
-        messages,
-        input,
-    } = storeToRefs(useChatStore());
+    const message = ref("");
+    const room = useRoom();
+    const chat = useChatStore();
 
-    const {
-        sendMessage,
-    } = useChatStore();
-
-    const {
-        user,
-    } = storeToRefs(useUserStore());
-
-    function send() {
-        sendMessage(get(input));
-        set(input, "");
+    function sendMessage() {
+        room.sendMessage(get(message));
+        set(message, "");
     }
 </script>
 
@@ -33,8 +22,8 @@
     <Pane class="flex-col gap-4">
         <PaneTitle>Чат</PaneTitle>
         <div class="flex-1 flex flex-col justify-end text-xs overflow-y-scroll">
-            <Message v-for="{ type, text, name } in messages" :type :text :name></Message>
+            <Message v-for="{ type, text, name } in chat.messages" :type :text :name></Message>
         </div>
-        <Input placeholder="Сообщение..." v-model="input" class="inline-block" @keydown.enter="send"></Input>
+        <Input placeholder="Сообщение..." v-model="message" class="inline-block" @keydown.enter="sendMessage"></Input>
     </Pane>
 </template>

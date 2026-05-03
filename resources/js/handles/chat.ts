@@ -32,16 +32,9 @@ export const useChatStore = defineStore('chat', () => {
         });
     };
 
-    const room = useRoom();
-
-    const sendMessage = (text: string) => room.channel!.send('chat', {
-        text,
-    });
-
     return {
         addPlayerMessage,
         addServerMessage,
-        sendMessage,
         messages,
         input,
     };

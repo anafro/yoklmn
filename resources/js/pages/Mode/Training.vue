@@ -2,7 +2,7 @@
 import { useUserStore } from '@/api/user/user';
 import Player from '@/components/room/Player.vue';
 import PlayerTray from '@/components/room/PlayerTray.vue';
-import RoomBase from '@/components/room/RoomBase.vue';
+import PaneLayout from '@/components/shared/PaneLayout.vue';
 import Timer from '@/components/room/Timer.vue';
 import WordInput from '@/components/room/WordInput.vue';
 import { useTrainingStore } from '@/handles/modes/training';
@@ -39,7 +39,7 @@ onUnmounted((): void => {
 </script>
 
 <template>
-    <RoomBase background="training">
+    <PaneLayout background="training">
         <template #top>
             <Timer></Timer>
             <span class="text-white text-center font-stretch-extra-expanded text-3xl font-thin">{{ randomToken }}</span>
@@ -52,5 +52,5 @@ onUnmounted((): void => {
                 <Player :name="user.name"></Player>
             </PlayerTray>
         </template>
-    </RoomBase>
+    </PaneLayout>
 </template>
