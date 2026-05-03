@@ -20,10 +20,8 @@ final class CreateRoom
         while ($attempt++ < $attempts) {
             $code = $generator->generate();
             $room = Room::withCode($code);
-            Log::info("Trying to create a room #$code (attempt #$attempt)...");
 
             if ($room->doesntExist()) {
-                Log::info("Created a room #$code on attempt #$attempt!");
                 $room->create(RoomType::VANILLA);
                 return $room;
             }
