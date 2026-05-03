@@ -4,6 +4,7 @@ namespace App\Broadcasting;
 
 use Anafro\Biosphere\Channels\Channel;
 use Anafro\Biosphere\Messages\Message;
+use App\Rooms\Room;
 use Illuminate\Support\Facades\Log;
 
 class RoomChannel extends Channel
@@ -37,7 +38,7 @@ class RoomChannel extends Channel
         $room->add($player);
         $this->send('join', [
             'player' => $player->name,
-            'players' => $room->playerNames(),
+            ...$this->stateOf($room),
         ]);
     }
 
@@ -52,27 +53,16 @@ class RoomChannel extends Channel
         $room->remove($player);
         $this->send('quit', [
             'player' => $player->name,
-            'players' => $room->playerNames(),
+            ...$this->stateOf($room),
         ]);
     }
 
     public function message(Message $message): void
     {
-        match ($message->event) {
-            "ping"  => $this->send('pong', []),
-            "chat"  => $this->send('chat', [
-                "text" => $message->data['text'],
-                "player" => $message->user->name,
-            ]),
-
-            default => null,
-        };
-
-        $this->send('$event', $message->data);
-
-        Log::info($message->toJson(JSON_PRETTY_PRINT));
+        $code = $this->parameter('code');
+        $room = room($code);
+        $room->status()->message($room, $this, $message);
     }
-
 
     /**
      * @param \App\Models\User $player
@@ -80,5 +70,13 @@ class RoomChannel extends Channel
     public function heartbeat(mixed $player): void
     {
         //
+    }
+
+    private function stateOf(Room $room): array
+    {
+        return [
+            "players" => $room->playerNames(),
+            "host" => $room->hostName(),
+        ];
     }
 }

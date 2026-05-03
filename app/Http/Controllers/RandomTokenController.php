@@ -10,10 +10,9 @@ class RandomTokenController extends Controller
 {
     public function __invoke(RandomTokenRequest $request): JsonResponse
     {
-        $validated = $request->validated();
-        $randomToken = Token::query()->inRandomOrder()->firstOrFail();
+        $request->validated();
         return response()->json([
-            'token' => $randomToken->string,
+            'token' => Token::random(),
         ]);
     }
 }

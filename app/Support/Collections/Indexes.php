@@ -23,14 +23,16 @@ final class Indexes
         throw IndexOutOfBoundsException::of($index, $items);
     }
     /**
-     * @param Countable|mixed[] $items
+     * @param Countable|mixed[]|string $items
      */
-    public static function inBounds(int $index, Countable|array $items): bool
+    public static function inBounds(int $index, Countable|array|string $items): bool
     {
-        if (count($items) === 0) {
+        $count = is_string($items) ? 'mb_strlen' : 'count';
+
+        if ($count($items) === 0) {
             return false;
         }
 
-        return 0 <= $index && $index < count($items);
+        return 0 <= $index && $index < $count($items);
     }
 }
